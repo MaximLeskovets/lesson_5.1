@@ -4,13 +4,15 @@ error_reporting(0);
 
 
     function isGet(){
-        if (!empty($_GET['seach'])){
+        if (!empty($_GET)){
             return true;
         }
     }
 
     if (isGet()) {
-        $seach = $_GET['seach'];
+        $seach =    $_GET['seach'];
+        $lata =     $_GET['lat'];
+        $lona =     $_GET['lon'];
     }
 
     $api = new \Yandex\Geo\Api();
@@ -25,20 +27,26 @@ error_reporting(0);
     $foundCount = $response->getFoundCount();
     $collection = $response->getList();
     $i=0;
+
+
     foreach ($collection as $item) {
         $result[$i]=array(
             $item->getAddress(),
             $item->getLatitude(),
             $item->getLongitude());
+            $lon[$i] = $item->getLongitude();
+            $lat[$i] = $item->getLatitude();
         $i++;
     }
 
-function view($result)
-{
-    foreach ($result as $key) {
-        for ($i = 0; $i < 3; $i++) {
-            echo $key[$i] . "<br/>";
+    function view($result,$lat,$lon,$seach)
+    {
+        $j=0;
+        foreach ($result as $key) {
+            for ($i = 0; $i < 1; $i++) {
+                echo "<a href=?seach=$seach&lat=$lat[$j]&lon=$lon[$j]>".$key[$i] ."<br/></a>";
+                $j++;
+            }
+            echo "<br/>";
         }
-        echo "<br/>";
     }
-}
